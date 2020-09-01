@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <cs50.h>
+#include <string.h>
+//for character classification functions
+#include <ctype.h>
+
+//function declaration
+bool validate(string key);
+
+//global variable
+string abc = "abcdefghijklmnopqrstuvwxyz";
+
+int main(int argc, string argv[])
+{
+    if (argc == 2)
+    {
+        string key = argv [1];
+        if (validate(key) == true)
+        {
+
+            string plaintext = get_string("plaintext: ");
+            int length = strlen(plaintext);
+            char ciphertext[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                if (isupper(plaintext[i]) != 0)
+                {
+                    for (int j = 0; j < 26; j++)
+                    {
+                        if (abc[j] == tolower(plaintext[i]))
+                        {
+                            ciphertext[i] = toupper(key[j]);
+                            break;
+                        }
+                    }
+                }
+                else if (islower(plaintext[i]) != 0)
+                {
+                    for (int j = 0; j < 26; j++)
+                    {
+                        if (abc[j] == plaintext[i])
+                        {
+                            ciphertext[i] = tolower(key[j]);
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    ciphertext[i] = plaintext[i];
+                }
+            }
+            printf("ciphertext: %s\n", ciphertext);
+            return 0;
+
+        }
+        else
+        {
+            printf("Key must contain 26 unique characters\n");
+            return 1;
+        }
+
+    }
+    else
+    {
+        printf("Usage: ./substitution key \n");
+        return 1;
+    }
+}
+
+bool validate(string key)
+{
+    int match_counter = 0;
+    if (strlen(key) == 26)
+    {
+        for (int i = 0; i < 26; i++)
+        {
+            for (int j = 0; j < 26; j++)
+            {
+                if (tolower(key[j]) == abc[i])
+                {
+                    match_counter++;
+                    break;
+                }
+            }
+        }
+        if (match_counter == 26)
+        {
+            return true;
+        }
+        return false;
+    }
+    return false;
+
+}
